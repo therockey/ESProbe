@@ -1,0 +1,34 @@
+
+# Loads default set of integrations. Do not remove.
+default_config:
+
+# Load frontend themes from the themes folder
+frontend:
+  themes: !include_dir_merge_named themes
+
+automation: !include automations.yaml
+script: !include scripts.yaml
+scene: !include scenes.yaml
+
+mqtt:
+  number:
+    - name: "Częstotliwość sprawdzania temperatury"
+      state_topic: "home/livingroom/temperature/delta"
+      command_topic: "home/livingroom/temperature/delta"
+      min: 1000
+      max: 10000
+      step: 100
+      qos: 1
+      retain: true
+      value_template: "{{ value | int }}"
+      unique_id: "delta_temp_01"
+
+  sensor:
+    - name: "Czujnik temperatury 1"
+      state_topic: "home/livingroom/temperature"
+      unit_of_measurement: "°C"
+      value_template: "{{ value | float }}"
+      qos: 1
+      device_class: temperature
+      unique_id: "temp_01"
+

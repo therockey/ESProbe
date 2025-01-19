@@ -1,0 +1,25 @@
+services:
+  homeassistant:
+    container_name: home-assistant
+    image: ghcr.io/home-assistant/home-assistant:stable
+    volumes:
+      - ./config:/config
+      - /etc/localtime:/etc/localtime:ro
+    environment:
+      - TZ=Europe/Warsaw
+    network_mode: host
+    restart: unless-stopped
+
+  mqtt:
+    container_name: mqtt-broker
+    image: eclipse-mosquitto:latest
+    ports:
+      - "1883:1883"   # MQTT port
+      - "9001:9001"   # WebSocket port (optional)
+    volumes:
+      - ./mosquitto/config:/mosquitto/config
+      - ./mosquitto/data:/mosquitto/data
+      - ./mosquitto/log:/mosquitto/log
+      - ./mqtt_init.sh:/mqtt_init.sh:ro # Mount the initialization script
+    entrypoint: ["/bin/sh", "-c", "/mqtt_init.sh && /usr/sbin/mosquitto -c /mosquitto/config/mosquitto.conf"]
+    restart: unless-stopped
