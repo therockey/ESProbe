@@ -39,12 +39,14 @@ static DS18B20_Info *ds18b20_info = NULL;
 
 void ssd1306_display_temp(float temp) {
     char temp_str[10];
+    ssd1306_clear_line(&dev, 2, false);
     snprintf(temp_str, sizeof(temp_str), " %.2f C", temp);
     ssd1306_display_text(&dev, 2, temp_str, strlen(temp_str), false);
 }
 
 void ssd1306_display_delta(int delta) {
     char delta_str[10];
+    ssd1306_clear_line(&dev, 6, false);
     snprintf(delta_str, sizeof(delta_str), " %d", delta);
     ssd1306_display_text(&dev, 6, delta_str, strlen(delta_str), false);
 }
